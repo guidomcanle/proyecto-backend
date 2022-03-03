@@ -2,16 +2,16 @@ const express = require("express");
 const app = express();
 const Contenedor = require("./CanleGuido-desafio");
 
-const container = new Contenedor("./productos.json");
+const contenedor = new Contenedor("./productos.json");
 
 app.get("/", (requerido, respuesta) => {
   respuesta.send("<h1>Bienvenido</h1>");
 });
 
 app.get("/productos", async (requerido, respuesta) => {
-  const productosArray = await container.getAll();
+  const productosArray = await contenedor.getAll();
 
-  let list = `<ul></ul>`;
+  let list = ``;
   for (const p of productosArray) {
     list += `<li>${p.title}</li>`;
   }
@@ -20,7 +20,7 @@ app.get("/productos", async (requerido, respuesta) => {
 });
 
 app.get("/ProductoRandom", async (requerido, respuesta) => {
-  const productosArray = await container.getAll();
+  const productosArray = await contenedor.getAll();
 
   const random = Math.floor(Math.random() * productosArray.length);
   respuesta.send(productosArray[random]);
