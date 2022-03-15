@@ -38,7 +38,7 @@ class Contenedor {
       return id;
     } else {
       let id = topNumber + 1;
-      info.push({ title, price, thumbnail, id });
+      info.push({ title, price: parseFloat(price), thumbnail, id });
       try {
         fs.promises.writeFile(this.rutaArchivo, JSON.stringify(info, null, 2));
         console.log("hecho");
@@ -46,7 +46,7 @@ class Contenedor {
         console.log("Error en save");
       }
       console.log(id);
-      return id;
+      return { title, price: parseFloat(price), thumbnail, id };
     }
   }
 
@@ -59,6 +59,34 @@ class Contenedor {
 
     console.log(productoById);
     return productoById;
+  }
+
+  async updateProduct(id, newTitle, newPrice, newThumbnail) {
+    let info = await this.getAll();
+    const pos = info.findIndex((p) => {
+      return p.id == id;
+    });
+
+    if (pos !== undefined) {
+      const newProd = {
+        title: newTitle,
+        price: newPrice,
+        thumbnail: newThumbnail,
+        id: id,
+      };
+
+      const del = id - 1;
+      info.splice(del, 1, newProd);
+      fs.writeFile(this.rutaArchivo, JSON.stringify(info, null, 2), (er) => {
+        if (er) {
+          return { info: "no se pudo modificar el archivo" };
+        } else {
+          return { info: "Producto modificado" };
+        }
+      });
+    } else {
+      console.log("Error");
+    }
   }
 
   async deleteById(id) {
