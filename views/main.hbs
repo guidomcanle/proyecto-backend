@@ -1,5 +1,9 @@
-{{#each productosArray}}
-  <p>{{title}}</p>
-  <img src="{{thumbnail}}" alt="" />
-  <p>{{price}}</p>
-{{/each}}
+{{#if productosArray}}
+  {{#each productosArray}}
+    <p>{{title}}</p>
+    <img src="{{thumbnail}}" alt="" />
+    <p>{{price}}</p>
+  {{/each}}
+{{else}}
+  <p>No hay libros</p>
+{{/if}}

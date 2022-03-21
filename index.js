@@ -15,20 +15,20 @@ app.use("/static", express.static(__dirname + "/public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// app.engine(
-//   "hbs",
-//   handlebars.engine({
-//     extname: ".hbs",
-//     defaultLayout: "index.hbs",
-//     layoutsDir: __dirname + "/views/layouts/",
-//     partialsDir: __dirname + "/views/partials/",
-//   })
-// );
+app.engine(
+  "hbs",
+  handlebars.engine({
+    extname: ".hbs",
+    defaultLayout: "index.hbs",
+    layoutsDir: __dirname + "/views/layouts/",
+    partialsDir: __dirname + "/views/partials/",
+  })
+);
 
-// app.set("view engine", "hbs");
-// app.set("view engine", "pug");
-app.set("view engine", "ejs");
-// app.set("views", "./views");
+app.set("view engine", "hbs");
+// // app.set("view engine", "pug");
+// app.set("view engine", "ejs");
+app.set("views", "./views");
 
 router.route("/").get((requerido, respuesta) => {
   respuesta.send("<h1>Bienvenido</h1>");
@@ -37,13 +37,13 @@ router.route("/").get((requerido, respuesta) => {
 router
   .route("/productos")
   .get(async (requerido, respuesta) => {
-    // respuesta.render("main", { productosArray: await contenedor.getAll() });
-    // respuesta.render("indexInPug", {
+    respuesta.render("main", { productosArray: await contenedor.getAll() });
+    // // respuesta.render("indexInPug", {
+    // //   productosArray: await contenedor.getAll(),
+    // // });
+    // respuesta.render("pages/index", {
     //   productosArray: await contenedor.getAll(),
     // });
-    respuesta.render("pages/index", {
-      productosArray: await contenedor.getAll(),
-    });
   })
   .post(async (requerido, respuesta) => {
     const nuevoProducto = requerido.body;
