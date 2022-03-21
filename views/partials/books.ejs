@@ -1,11 +1,11 @@
 <% if (productosArray.length === 0) { %>
-
-<p>No hay datos</p>
-
-<% }else{ %> <% for (let i = 0; i < productosArray.length; i++) { %>
-<div>
-  <p><%=productosArray[i].title%></p>
-  <img src="<%=productosArray[i].thumbnail%>" alt="" />
-  <p><%=productosArray[i].price%></p>
-</div>
+<tr>
+    <td>No hay datos</p>
+</tr>
+<% }else{ for (let i = 0; i < productosArray.length; i++) { %>
+<tr>
+  <td><%=productosArray[i].title%></td>
+  <td><img src="<%=productosArray[i].thumbnail%>" alt="" style="max-height: 150px"/></td>
+  <td><%=productosArray[i].price%></td>
+  </tr>
 <% } } %>

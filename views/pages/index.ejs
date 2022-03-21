@@ -3,7 +3,15 @@
     <%- include("../partials/head")%>
   </head>
   <body>
-    <%- include("../partials/books")%>
+    <table>
+        <thead>
+            <tr>
+                <th >Title</th>
+                <th >Image</th>
+                <th >price</th>
+            </tr>
+      <%- include("../partials/books")%>
+    </table>
     <button><a href="/static">Ir a agregar produto</a></button>
   </body>
 </html>

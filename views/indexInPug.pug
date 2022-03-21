@@ -4,15 +4,22 @@ head
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title Documento
 body
-  main
-    if productosArray.length > 0
-      each book in productosArray
-          div 
-              p= book.title
-              img(src=book.thumbnail, alt="")
-              p=price
-    else 
-      p="No hay libros"
+  table 
+    thead
+      tr
+        th= "Title"
+        th="Image"
+        th="price"
+      if productosArray.length > 0
+        each book in productosArray
+          tr 
+            td= book.title
+            td
+             img(src=book.thumbnail alt="" style="max-height: 150px")
+            td=book.price
+      else 
+        tr
+          td="No hay libros"
 
   button
     a(href='/static') Ir a agregar produto
