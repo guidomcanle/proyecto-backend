@@ -53,17 +53,12 @@ router
   .route("/productos/:id")
   .get(async (requerido, respuesta) => {
     const id = requerido.params.id;
-    const productosArray = await contenedor.getAll();
 
-    if (id > productosArray.length) {
+    if (id != true) {
+      respuesta.send(await contenedor.getById(id));
+    } else {
       respuesta.send({ error: "El producto no existe" });
-      return;
-    } else if (id <= 0) {
-      respuesta.send({ error: "El producto no existe" });
-      return;
     }
-
-    respuesta.send(productosArray[id - 1]);
   })
   .put(async (requerido, respuesta) => {
     const id = Number(requerido.params.id);
@@ -77,12 +72,9 @@ router
   })
   .delete(async (requerido, respuesta) => {
     const id = requerido.params.id;
-    const productosArray = await contenedor.getAll();
-
     const arrayNuevo = await contenedor.deleteById(id);
-    productosArray.replace(arrayNuevo);
 
-    respuesta.send({ nuevoArray: productosArray });
+    respuesta.send({ nuevoArray: arrayNuevo });
   });
 
 router.route("/productoRandom").get(async (requerido, respuesta) => {

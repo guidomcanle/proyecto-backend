@@ -53,11 +53,9 @@ class Contenedor {
   async getById(id) {
     let info = await this.getAll();
 
-    let arrayById = await info.filter((info) => info.id === id);
-
+    let arrayById = await info.filter((info) => info.id === Number(id));
     let productoById = arrayById[0];
 
-    console.log(productoById);
     return productoById;
   }
 
