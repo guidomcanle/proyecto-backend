@@ -1,0 +1,19 @@
+head
+  meta(charset='UTF-8')
+  meta(http-equiv='X-UA-Compatible' content='IE=edge')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title Documento
+body
+  main
+    if productosArray.length > 0
+      each book in productosArray
+          div 
+              p= book.title
+              img(src=book.thumbnail, alt="")
+              p=price
+    else 
+      p="No hay libros"
+
+  button
+    a(href='/static') Ir a agregar produto
+
