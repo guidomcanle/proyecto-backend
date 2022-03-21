@@ -1,0 +1,11 @@
+<% if (productosArray.length === 0) { %>
+
+<p>No hay datos</p>
+
+<% }else{ %> <% for (let i = 0; i < productosArray.length; i++) { %>
+<div>
+  <p><%=productosArray[i].title%></p>
+  <img src="<%=productosArray[i].thumbnail%>" alt="" />
+  <p><%=productosArray[i].price%></p>
+</div>
+<% } } %>

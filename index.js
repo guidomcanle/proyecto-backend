@@ -26,8 +26,9 @@ app.use(express.urlencoded({ extended: true }));
 // );
 
 // app.set("view engine", "hbs");
-app.set("view engine", "pug");
-app.set("views", "./views");
+// app.set("view engine", "pug");
+app.set("view engine", "ejs");
+// app.set("views", "./views");
 
 router.route("/").get((requerido, respuesta) => {
   respuesta.send("<h1>Bienvenido</h1>");
@@ -37,7 +38,10 @@ router
   .route("/productos")
   .get(async (requerido, respuesta) => {
     // respuesta.render("main", { productosArray: await contenedor.getAll() });
-    respuesta.render("indexInPug", {
+    // respuesta.render("indexInPug", {
+    //   productosArray: await contenedor.getAll(),
+    // });
+    respuesta.render("pages/index", {
       productosArray: await contenedor.getAll(),
     });
   })
