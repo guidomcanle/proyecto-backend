@@ -1,26 +1,20 @@
 [
   {
-    "title": "Pokemon",
+    "title": "The dark knight returns",
     "price": 1500,
-    "thumbnail": "https://www.google.com/",
+    "thumbnail": "https://i.imgur.com/hBDBy7s.jpg",
     "id": 1
   },
   {
-    "title": "Pikachu",
+    "title": "Mauss",
     "price": 1300,
-    "thumbnail": "https://www.google.com.ar/",
+    "thumbnail": "https://i.imgur.com/0uTlAqS.jpg",
     "id": 2
   },
   {
-    "title": "Charmander",
-    "price": 1500,
-    "thumbnail": "https://www.google.com/",
+    "title": "Akira vol.1",
+    "price": 2000,
+    "thumbnail": "https://i.imgur.com/9CpZ45v.jpg",
     "id": 3
-  },
-  {
-    "title": "aasfas",
-    "price": 850,
-    "thumbnail": "agaegnael",
-    "id": 4
   }
 ]

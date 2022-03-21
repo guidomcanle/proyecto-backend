@@ -1,8 +1,9 @@
 const express = require("express");
-const req = require("express/lib/request");
+/*const req = require("expressnp/lib/request");*/
 const { Router } = express;
+const handlebars = require("express-handlebars");
 
-const Contenedor = require("./CanleGuido-desafio");
+const Contenedor = require("./container");
 
 const contenedor = new Contenedor("./productos.json");
 
@@ -14,6 +15,19 @@ app.use("/static", express.static(__dirname + "/public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.engine(
+  "hbs",
+  handlebars.engine({
+    extname: ".hbs",
+    defaultLayout: "index.hbs",
+    layoutsDir: __dirname + "/views/layouts/",
+    partialsDir: __dirname + "/views/partials/",
+  })
+);
+
+app.set("view engine", "hbs");
+app.set("views", "./views");
+
 router.route("/").get((requerido, respuesta) => {
   respuesta.send("<h1>Bienvenido</h1>");
 });
@@ -21,18 +35,14 @@ router.route("/").get((requerido, respuesta) => {
 router
   .route("/productos")
   .get(async (requerido, respuesta) => {
-    const productosArray = await contenedor.getAll();
-
-    respuesta.send(productosArray);
+    respuesta.render("main", { productosArray: await contenedor.getAll() });
   })
   .post(async (requerido, respuesta) => {
     const nuevoProducto = requerido.body;
-    const productosArray = await contenedor.getAll();
 
-    const productoConId = await contenedor.save(nuevoProducto);
-    productosArray.push(productoConId);
+    await contenedor.save(nuevoProducto);
 
-    respuesta.send({ produtoAgregado: productoConId });
+    respuesta.redirect(__dirname + "/static");
   });
 
 router
