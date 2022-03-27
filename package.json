@@ -8,11 +8,12 @@
     "express-handlebars": "^6.0.3",
     "hbs": "^4.2.0",
     "nodemon": "^2.0.15",
-    "pug": "^3.0.2"
+    "pug": "^3.0.2",
+    "socket.io": "^4.4.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
