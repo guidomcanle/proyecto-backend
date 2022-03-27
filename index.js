@@ -1,5 +1,4 @@
 const express = require("express");
-/*const req = require("expressnp/lib/request");*/
 const { Router } = express;
 const handlebars = require("express-handlebars");
 
@@ -15,20 +14,24 @@ app.use("/static", express.static(__dirname + "/public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Código como si usara el hbs
 // app.engine(
 //   "hbs",
 //   handlebars.engine({
 //     extname: ".hbs",
 //     defaultLayout: "index.hbs",
-//     layoutsDir: __dirname + "/views/layouts/",
-//     partialsDir: __dirname + "/views/partials/",
+//     layoutsDir: __dirname + "/hbs/views/layouts",
+//     partialsDir: __dirname + "/hbs/views/partials",
 //   })
 // );
 // app.set("view engine", "hbs");
-// app.set("views", "./views");
+// app.set("views", "./hbs/views");
 
+// Código como si usara el pug
 // app.set("view engine", "pug");
+// app.set("views", "./pug/views");
 
+// Para ejs
 app.set("view engine", "ejs");
 
 router.route("/").get((requerido, respuesta) => {
@@ -42,20 +45,22 @@ router
       productosArray: await contenedor.getAll(),
     });
   })
-  .get(async (requerido, respuesta) => {
-    respuesta.render("main", { productosArray: await contenedor.getAll() });
-  })
-  .get(async (requerido, respuesta) => {
-    respuesta.render("indexInPug", {
-      productosArray: await contenedor.getAll(),
-    });
-  })
+  // Código como si usara el hbs
+  // .get(async (requerido, respuesta) => {
+  //   respuesta.render("main", { productosArray: await contenedor.getAll() });
+  // })
+  // Código como si usara el pug
+  // .get(async (requerido, respuesta) => {
+  //   respuesta.render("indexInPug", {
+  //     productosArray: await contenedor.getAll(),
+  //   });
+  // })
   .post(async (requerido, respuesta) => {
     const nuevoProducto = requerido.body;
 
     await contenedor.save(nuevoProducto);
 
-    respuesta.redirect(__dirname + "/static");
+    respuesta.redirect("/static");
   });
 
 router

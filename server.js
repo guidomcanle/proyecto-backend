@@ -20,11 +20,7 @@ httpServer.listen(8080, () =>
   console.log("Servidor corriendo en http://localhost:8080")
 );
 
-const messages = [
-  { author: "Juan", text: "¡Hola! ¿Que tal?" },
-  { author: "Pedro", text: "¡Muy bien! ¿Y vos?" },
-  { author: "Ana", text: "¡Genial!" },
-];
+const messages = [];
 
 io.on("connection", function (socket) {
   console.log("Un cliente se ha conectado");

@@ -1,0 +1,11 @@
+{{#if productosArray}}
+  {{#each productosArray}}
+    <tr>
+      <td><p>{{title}}</p></td>
+      <td><img src="{{thumbnail}}" alt="" style="max-height: 150px" /></td>
+      <td><p>{{price}}</p></td>
+    </tr>
+  {{/each}}
+{{else}}
+  <p>No hay libros</p>
+{{/if}}
