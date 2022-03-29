@@ -1,18 +1,44 @@
 const express = require("express");
 const { Router } = express;
-const handlebars = require("express-handlebars");
-
 const Contenedor = require("./container");
-
+const ChatMemorie = require("./chatMemorie");
 const contenedor = new Contenedor("./productos.json");
+const chatMemorie = new ChatMemorie("./chatMemorie.json");
+
+// const handlebars = require("express-handlebars");
 
 const app = express();
 const router = Router();
 
-app.use("/static", express.static(__dirname + "/public"));
+app.use("/", express.static(__dirname + "/public"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+const { Server: HttpServer } = require("http");
+const { Server: IOServer } = require("socket.io");
+
+const httpServer = new HttpServer(app);
+const io = new IOServer(httpServer);
+
+const data = chatMemorie.getHistorial();
+
+io.on("connection", (socket) => {
+  console.log("User Connected");
+
+  console.log(data);
+  io.sockets.emit("requestChat", data);
+
+  socket.on("newMessage", (msg) => {
+    chatMemorie.push(msg);
+    io.sockets.emit("messages", chatMemorie);
+  });
+});
+
+// El servidor funcionando en el puerto 3000
+httpServer.listen(8080, () =>
+  console.log("Servidor corriendo en http://localhost:8080")
+);
 
 // Código como si usara el hbs
 // app.engine(
@@ -49,6 +75,7 @@ router
   // .get(async (requerido, respuesta) => {
   //   respuesta.render("main", { productosArray: await contenedor.getAll() });
   // })
+
   // Código como si usara el pug
   // .get(async (requerido, respuesta) => {
   //   respuesta.render("indexInPug", {
@@ -99,11 +126,3 @@ router.route("/productoRandom").get(async (requerido, respuesta) => {
 });
 
 app.use("/api", router);
-
-const PORT = 8080;
-
-const server = app.listen(PORT, () => {
-  console.log(`Servidor http escuchando en el puerto ${server.address().port}`);
-});
-
-server.on("error", (error) => console.log(`Error en servidor ${error}`));

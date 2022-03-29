@@ -13,5 +13,33 @@
       <%- include("../partials/books")%>
     </table>
     <button><a href="/static">Ir a agregar produto</a></button>
+
+
+    <h2>Chat</h2>
+<div>
+  <form onsubmit="addMessage(this)">
+    <label for="e-mail">
+      <input
+        type="email"
+        id="inputEmail"
+        placeholder="example@example.com"
+        required
+      />
+    </label>
+    <label for="Mensaje">
+      <input
+        type="text"
+        id="inputMessage"
+        placeholder="chat here..."
+        required
+      />
+    </label>
+    <button type="submit" id="btnSend">Send messages</button>
+  </form>
+
+  <div id="chatBox"></div>
+</div>
+
+<%- include("../partials/chat")%>
   </body>
 </html>

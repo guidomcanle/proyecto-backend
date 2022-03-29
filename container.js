@@ -113,12 +113,4 @@ class Contenedor {
   }
 }
 
-const productos = new Contenedor("./productos.txt");
-
-const p = {
-  title: "Digimon",
-  price: 1200,
-  thumbnail: "https://www.infobae.com/",
-};
-
 module.exports = Contenedor;
