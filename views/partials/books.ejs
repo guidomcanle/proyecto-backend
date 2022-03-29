@@ -5,9 +5,9 @@
 <% }else{ for (let i = 0; i < productosArray.length; i++) { %>
 <tr>
   <td><%=productosArray[i].title%></td>
-  <td><img src="<%=productosArray[i].thumbnail%>" alt="" style="max-height: 150px"/></td>
+  <td><img src="<%=productosArray[i].thumbnail%>" alt="<%=productosArray[i].title%> img" style="max-height: 150px"/></td>
   <td><%=productosArray[i].price%></td>
-  </tr>
+</tr>
 <% } } %>
 
 

@@ -1,0 +1,41 @@
+<script>
+  const title = document.getElementById("title");
+  const price = document.getElementById("price");
+  const thumbnail = document.getElementById("thumbnail");
+  const tBody = document.getElementById("tableBooks");
+
+  const addBook = (e) => {
+    const book = {
+      title: title.value,
+      price: price.value,
+      thumbnail: thumbnail.value,
+    };
+    socket.emit("newBook", book);
+    return false;
+  };
+  const renderBookTable = (data) => {
+    tBody.innerHTML = "";
+    const tr = data
+      .map((book) => {
+        return `
+  <tr>
+    <td>${book.title}</td>
+    <td>
+      <img
+        src="${book.thumbnail}"
+        alt="${book.title} img"
+        style="max-height: 150px"
+      />
+    </td>
+    <td>$${book.price}</td>
+  </tr>
+  `;
+      })
+      .join("");
+    tBody.innerHTML = tr;
+  };
+
+  socket.on("requestBooks", (data) => {
+    renderBookTable(data);
+  });
+</script>

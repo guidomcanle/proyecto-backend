@@ -21,7 +21,7 @@ class ChatMemorie {
   }
 
   async saveHistorial(message) {
-    let info = await this.getAll();
+    let info = await this.getHistorial();
 
     info.push(message);
     try {

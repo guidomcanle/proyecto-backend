@@ -6,10 +6,6 @@
   const btnSend = document.getElementById("btnSend");
   const chatBox = document.getElementById("chatBox");
 
-  socket.on("requestChat", (data) => {
-    console.log(data);
-  });
-
   const addMessage = (e) => {
     const msg = {
       userEmail: inputEmail.value,
@@ -19,9 +15,6 @@
     socket.emit("newMessage", msg);
     return false;
   };
-  //   socket.on("requestChat", (messages) => {
-  //     render(messages);
-  //   });
 
   const render = (data) => {
     chatBox.innerHTML = "";
@@ -37,4 +30,11 @@
       .join(" ");
     chatBox.innerHTML = html;
   };
+
+  socket.on("requestChat", (data) => {
+    render(data);
+  });
+  socket.on("requestChat", (messages) => {
+    render(messages);
+  });
 </script>

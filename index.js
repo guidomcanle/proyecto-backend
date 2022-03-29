@@ -17,21 +17,23 @@ app.use(express.urlencoded({ extended: true }));
 
 const { Server: HttpServer } = require("http");
 const { Server: IOServer } = require("socket.io");
+const async = require("hbs/lib/async");
 
 const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
 
-const data = chatMemorie.getHistorial();
-
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
   console.log("User Connected");
+  io.sockets.emit("requestChat", await chatMemorie.getHistorial());
+  socket.on("newMessage", async (msg) => {
+    await chatMemorie.saveHistorial(msg);
+    io.sockets.emit("messages", await chatMemorie.getHistorial());
+  });
 
-  console.log(data);
-  io.sockets.emit("requestChat", data);
-
-  socket.on("newMessage", (msg) => {
-    chatMemorie.push(msg);
-    io.sockets.emit("messages", chatMemorie);
+  io.sockets.emit("requestBooks", await contenedor.getAll());
+  socket.on("newBook", async (book) => {
+    await contenedor.save(book);
+    io.sockets.emit("prodList", await contenedor.getAll());
   });
 });
 
@@ -84,10 +86,8 @@ router
   // })
   .post(async (requerido, respuesta) => {
     const nuevoProducto = requerido.body;
-
     await contenedor.save(nuevoProducto);
-
-    respuesta.redirect("/static");
+    respuesta.redirect("/api/productos");
   });
 
 router
