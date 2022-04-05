@@ -27,7 +27,32 @@
         "precio": 2000,
         "foto (url)": "https://i.imgur.com/9CpZ45v.jpg",
         "stock": ""
+      },
+      {
+        "id": 1,
+        "timestamp(producto)": "",
+        "nombre": "The dark knight returns",
+        "descripcion": "aioeghapegjape",
+        "código": 111,
+        "precio": 1500,
+        "foto": "https://i.imgur.com/hBDBy7s.jpg",
+        "stock": 3
+      },
+      {
+        "id": 4,
+        "timestamp": 1649125194440,
+        "nombre": "Pokemon vl1",
+        "descripcion": "un manga de pokemon",
+        "código": 444,
+        "foto": "https://images.cdn2.buscalibre.com/fit-in/360x360/a0/52/a052067bbfc9f11e969ac2ff7a1b63e0.jpg",
+        "precio": 500,
+        "stock": 45
       }
     ]
+  },
+  {
+    "id": 3,
+    "timeStamp": 1649200234444,
+    "productos": []
   }
 ]

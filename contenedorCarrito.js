@@ -104,6 +104,7 @@ class ContenedorCarrito {
     let dataAct = data.filter((data) => data.id != id);
     dataAct.push({
       id: parseInt(id),
+      timeStamp: info.timeStamp,
       productos: arrayWithoutElement,
     });
     try {
