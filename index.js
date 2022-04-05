@@ -1,8 +1,10 @@
 const express = require("express");
 const { Router } = express;
 const Contenedor = require("./container");
+const ContenedorCarrito = require("./contenedorCarrito");
 const ChatMemorie = require("./chatMemorie");
 const contenedor = new Contenedor("./productos.json");
+const contenedorCarrito = new ContenedorCarrito("./contenedorCarrito.json");
 const chatMemorie = new ChatMemorie("./chatMemorie.json");
 
 // const handlebars = require("express-handlebars");
@@ -103,12 +105,10 @@ router
   })
   .put(async (requerido, respuesta) => {
     const id = Number(requerido.params.id);
-    const title = String(requerido.body.title);
-    const price = Number(requerido.body.price);
-    const thumbnail = String(requerido.body.thumbnail);
-
-    await contenedor.updateProduct(id, title, price, thumbnail);
-
+    const nombre = String(requerido.body.title);
+    const precio = Number(requerido.body.price);
+    const foto = String(requerido.body.thumbnail);
+    await contenedor.updateProduct(id, nombre, precio, foto);
     respuesta.send(contenedor);
   })
   .delete(async (requerido, respuesta) => {
@@ -118,11 +118,57 @@ router
     respuesta.send({ nuevoArray: arrayNuevo });
   });
 
+router
+  .route("/carrito")
+  .get(async (requerido, respuesta) => {
+    respuesta.send(await contenedorCarrito.getAll());
+  })
+  .post(async (requerido, respuesta) => {
+    respuesta.send(await contenedorCarrito.crearCarrito());
+  });
+
+router.route("/carrito/:id").delete(async (requerido, respuesta) => {
+  const id = requerido.params.id;
+  const arrayNuevo = await contenedorCarrito.deleteCarritoById(id);
+
+  respuesta.send({ nuevoArray: arrayNuevo });
+});
+
+router
+  .route("/carrito/:id/productos")
+  .get(async (requerido, respuesta) => {
+    const id = requerido.params.id;
+    respuesta.send(await contenedorCarrito.getCarritoById(id));
+  })
+  .post(async (requerido, respuesta) => {
+    const id = requerido.params.id;
+    const idProd = requerido.body.idProd;
+    const prod = await contenedor.getById(idProd);
+    respuesta.send(await contenedorCarrito.addProdInCarById(id, prod));
+  });
+
+router
+  .route("/carrito/:id/productos/:id_prod")
+  .delete(async (requerido, respuesta) => {
+    const id = requerido.params.id;
+    const idProd = requerido.params.id_prod;
+
+    if (id == true) {
+      respuesta.send(await contenedorCarrito.deleteProdinCarById(id, idProd));
+    } else {
+      respuesta.send({ error: "El carrito no existe 3" });
+    }
+  });
+
 router.route("/productoRandom").get(async (requerido, respuesta) => {
   const productosArray = await contenedor.getAll();
   const random = Math.floor(Math.random() * productosArray.length);
 
   respuesta.send(productosArray[random]);
 });
+
+// app.get("*", function (req, res) {
+//   res.send("what???", 404);
+// });
 
 app.use("/api", router);

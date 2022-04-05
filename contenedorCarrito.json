@@ -1,0 +1,33 @@
+[
+  {
+    "id": 1,
+    "timeStamp": 1649121430050,
+    "productos": []
+  },
+  {
+    "id": 2,
+    "timeStamp": 1649122407872,
+    "productos": [
+      {
+        "id": 1,
+        "timestamp(producto)": "",
+        "nombre": "The dark knight returns",
+        "descripcion": "",
+        "código": "",
+        "precio": 1500,
+        "foto (url)": "https://i.imgur.com/hBDBy7s.jpg",
+        "stock": ""
+      },
+      {
+        "id": 3,
+        "timestamp(producto)": "",
+        "nombre": "Akira vol.1",
+        "descripcion": "",
+        "código": "",
+        "precio": 2000,
+        "foto (url)": "https://i.imgur.com/9CpZ45v.jpg",
+        "stock": ""
+      }
+    ]
+  }
+]

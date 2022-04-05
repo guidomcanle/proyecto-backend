@@ -1,20 +1,42 @@
 [
   {
-    "title": "The dark knight returns",
-    "price": 1500,
-    "thumbnail": "https://i.imgur.com/hBDBy7s.jpg",
-    "id": 1
+    "id": 1,
+    "timestamp(producto)": "",
+    "nombre": "The dark knight returns",
+    "descripcion": "aioeghapegjape",
+    "código": 111,
+    "precio": 1500,
+    "foto": "https://i.imgur.com/hBDBy7s.jpg",
+    "stock": 3
   },
   {
-    "title": "Mauss",
-    "price": 1300,
-    "thumbnail": "https://i.imgur.com/0uTlAqS.jpg",
-    "id": 2
+    "id": 2,
+    "timestamp(producto)": "",
+    "nombre": "Mauss",
+    "descripcion": "pogjpsogjops",
+    "código": 222,
+    "precio": 1300,
+    "foto": "https://i.imgur.com/0uTlAqS.jpg",
+    "stock": 10
   },
   {
-    "title": "Akira vol.1",
-    "price": 2000,
-    "thumbnail": "https://i.imgur.com/9CpZ45v.jpg",
-    "id": 3
+    "id": 3,
+    "timestamp(producto)": "",
+    "nombre": "Akira vol.1",
+    "descripcion": "bklmxklmblxk",
+    "código": 333,
+    "precio": 2000,
+    "foto": "https://i.imgur.com/9CpZ45v.jpg",
+    "stock": 5
+  },
+  {
+    "id": 4,
+    "timestamp": 1649125194440,
+    "nombre": "Pokemon vl1",
+    "descripcion": "un manga de pokemon",
+    "código": 444,
+    "foto": "https://images.cdn2.buscalibre.com/fit-in/360x360/a0/52/a052067bbfc9f11e969ac2ff7a1b63e0.jpg",
+    "precio": 500,
+    "stock": 45
   }
 ]

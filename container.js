@@ -5,6 +5,7 @@ class Contenedor {
     this.rutaArchivo = rutaArchivo;
   }
 
+  //Usuario común
   async getAll() {
     try {
       const data = await fs.promises.readFile(this.rutaArchivo, "utf-8");
@@ -19,15 +20,30 @@ class Contenedor {
       console.log(`creado un archivo de texto con ruta ${this.rutaArchivo}`);
     }
   }
+  async getById(id) {
+    let info = await this.getAll();
+    let arrayById = await info.filter((info) => info.id === Number(id));
+    let productoById = arrayById[0];
+    return productoById;
+  }
 
-  async save({ title, price, thumbnail }) {
+  //Administrador
+  async save({ nombre, descripcion, código, foto, precio, stock }) {
     let info = await this.getAll();
     let infoOnlyId = info.map((info) => info.id);
     let topNumber = Math.max(...infoOnlyId);
-
     if (topNumber == "-Infinity") {
       let id = 1;
-      info.push({ title, price, thumbnail, id });
+      info.push({
+        id: id,
+        timestamp: Date.now(),
+        nombre,
+        descripcion,
+        código: parseInt(código),
+        foto,
+        precio: parseFloat(precio),
+        stock: parseInt(stock),
+      });
       try {
         fs.promises.writeFile(this.rutaArchivo, JSON.stringify(info, null, 2));
         console.log("hecho");
@@ -38,7 +54,16 @@ class Contenedor {
       return id;
     } else {
       let id = topNumber + 1;
-      info.push({ title, price: parseFloat(price), thumbnail, id });
+      info.push({
+        id: id,
+        timestamp: Date.now(),
+        nombre,
+        descripcion,
+        código: parseInt(código),
+        foto,
+        precio: parseFloat(precio),
+        stock: parseInt(stock),
+      });
       try {
         fs.promises.writeFile(this.rutaArchivo, JSON.stringify(info, null, 2));
         console.log("hecho");
@@ -46,17 +71,17 @@ class Contenedor {
         console.log("Error en save");
       }
       console.log(id);
-      return { title, price: parseFloat(price), thumbnail, id };
+      return {
+        id: id,
+        timestamp: Date.now(),
+        nombre,
+        descripcion,
+        código: parseInt(código),
+        foto,
+        precio: parseFloat(precio),
+        stock: parseInt(stock),
+      };
     }
-  }
-
-  async getById(id) {
-    let info = await this.getAll();
-
-    let arrayById = await info.filter((info) => info.id === Number(id));
-    let productoById = arrayById[0];
-
-    return productoById;
   }
 
   async updateProduct(id, newTitle, newPrice, newThumbnail) {
@@ -64,7 +89,6 @@ class Contenedor {
     const pos = info.findIndex((p) => {
       return p.id == id;
     });
-
     if (pos !== undefined) {
       const newProd = {
         title: newTitle,
@@ -72,7 +96,6 @@ class Contenedor {
         thumbnail: newThumbnail,
         id: id,
       };
-
       const del = id - 1;
       info.splice(del, 1, newProd);
       fs.writeFile(this.rutaArchivo, JSON.stringify(info, null, 2), (er) => {
@@ -89,9 +112,7 @@ class Contenedor {
 
   async deleteById(id) {
     let info = await this.getAll();
-
     let arrayWithoutElement = await info.filter((info) => info.id != id);
-
     try {
       await fs.promises.writeFile(
         this.rutaArchivo,

@@ -1,14 +1,20 @@
 <script>
-  const title = document.getElementById("title");
-  const price = document.getElementById("price");
-  const thumbnail = document.getElementById("thumbnail");
+  const nombre = document.getElementById("nombre");
+  const precio = document.getElementById("precio");
+  const descripcion = document.getElementById("descripcion");
+  const código = document.getElementById("código");
+  const foto = document.getElementById("foto");
+  const stock = document.getElementById("stock");
   const tBody = document.getElementById("tableBooks");
 
   const addBook = (e) => {
     const book = {
-      title: title.value,
-      price: price.value,
-      thumbnail: thumbnail.value,
+      nombre: nombre.value,
+      precio: precio.value,
+      foto: foto.value,
+      descripcion: descripcion.value,
+      código: código.value,
+      stock: stock.value,
     };
     socket.emit("newBook", book);
     return false;
@@ -19,15 +25,18 @@
       .map((book) => {
         return `
   <tr>
-    <td>${book.title}</td>
+    <td>${book.nombre}</td>
     <td>
       <img
-        src="${book.thumbnail}"
-        alt="${book.title} img"
+        src="${book.foto}"
+        alt="${book.nombre} img"
         style="max-height: 150px"
       />
     </td>
-    <td>$${book.price}</td>
+    <td>$${book.precio}</td>
+    <td>${book.descripcion}</td>
+    <td>${book.código}</td>
+    <td>${book.stock}</td>
   </tr>
   `;
       })
