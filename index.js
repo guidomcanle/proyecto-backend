@@ -1,13 +1,17 @@
 const express = require("express");
 const { Router } = express;
-const Contenedor = require("./container");
 const ContenedorCarrito = require("./contenedorCarrito");
-const ChatMemorie = require("./chatMemorie");
-const contenedor = new Contenedor("./productos.json");
 const contenedorCarrito = new ContenedorCarrito("./contenedorCarrito.json");
-const chatMemorie = new ChatMemorie("./chatMemorie.json");
 
-// const handlebars = require("express-handlebars");
+const ContenedorMariaDB = require("./containerMariaDB");
+const ChatMemorieSqlite = require("./chatMemorieSqlite");
+const contenedor = new ContenedorMariaDB();
+const chatMemorie = new ChatMemorieSqlite();
+
+// const ChatMemorie = require("./chatMemorie");
+// const Contenedor = require("./container");
+// const contenedor = new Contenedor("./productos.json");
+// const chatMemorie = new ChatMemorie("./chatMemorie.json");
 
 const app = express();
 const router = Router();
@@ -28,6 +32,7 @@ io.on("connection", async (socket) => {
   console.log("User Connected");
   io.sockets.emit("requestChat", await chatMemorie.getHistorial());
   socket.on("newMessage", async (msg) => {
+    console.log(msg);
     await chatMemorie.saveHistorial(msg);
     io.sockets.emit("messages", await chatMemorie.getHistorial());
   });
@@ -44,23 +49,6 @@ httpServer.listen(8080, () =>
   console.log("Servidor corriendo en http://localhost:8080")
 );
 
-// Código como si usara el hbs
-// app.engine(
-//   "hbs",
-//   handlebars.engine({
-//     extname: ".hbs",
-//     defaultLayout: "index.hbs",
-//     layoutsDir: __dirname + "/hbs/views/layouts",
-//     partialsDir: __dirname + "/hbs/views/partials",
-//   })
-// );
-// app.set("view engine", "hbs");
-// app.set("views", "./hbs/views");
-
-// Código como si usara el pug
-// app.set("view engine", "pug");
-// app.set("views", "./pug/views");
-
 // Para ejs
 app.set("view engine", "ejs");
 
@@ -75,17 +63,6 @@ router
       productosArray: await contenedor.getAll(),
     });
   })
-  // Código como si usara el hbs
-  // .get(async (requerido, respuesta) => {
-  //   respuesta.render("main", { productosArray: await contenedor.getAll() });
-  // })
-
-  // Código como si usara el pug
-  // .get(async (requerido, respuesta) => {
-  //   respuesta.render("indexInPug", {
-  //     productosArray: await contenedor.getAll(),
-  //   });
-  // })
   .post(async (requerido, respuesta) => {
     const nuevoProducto = requerido.body;
     await contenedor.save(nuevoProducto);
@@ -97,7 +74,8 @@ router
   .get(async (requerido, respuesta) => {
     const id = requerido.params.id;
 
-    if (id != true) {
+    // No funciona este if, arreglar
+    if (id) {
       respuesta.send(await contenedor.getById(id));
     } else {
       respuesta.send({ error: "El producto no existe" });
@@ -105,10 +83,21 @@ router
   })
   .put(async (requerido, respuesta) => {
     const id = Number(requerido.params.id);
-    const nombre = String(requerido.body.title);
-    const precio = Number(requerido.body.price);
-    const foto = String(requerido.body.thumbnail);
-    await contenedor.updateProduct(id, nombre, precio, foto);
+    const nombre = String(requerido.body.nombre);
+    const precio = Number(requerido.body.precio);
+    const foto = String(requerido.body.foto);
+    const descripcion = String(requerido.body.descripcion);
+    const código = Number(requerido.body.código);
+    const stock = Number(requerido.body.stock);
+    await contenedor.updateProduct(
+      id,
+      nombre,
+      descripcion,
+      código,
+      foto,
+      precio,
+      stock
+    );
     respuesta.send(contenedor);
   })
   .delete(async (requerido, respuesta) => {

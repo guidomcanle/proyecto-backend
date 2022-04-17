@@ -5,6 +5,26 @@ class ContenedorCarrito {
     this.rutaArchivo = rutaArchivo;
   }
 
+  async createTable() {
+    try {
+      await knex.schema.createTable("prods", (table) => {
+        table.increments("id");
+        table.timestamp("timestamp(productos)").defaultTo(knex.fn.now());
+        table.string("nombre");
+        table.string("descripcion");
+        table.integer("código");
+        table.float("precio"), table.string("foto");
+        table.integer("stock");
+      });
+      console.log("table created");
+    } catch (err) {
+      console.log(err);
+      throw err;
+    } finally {
+      knex.destroy();
+    }
+  }
+
   async getAll() {
     try {
       const data = await fs.promises.readFile(this.rutaArchivo, "utf-8");
