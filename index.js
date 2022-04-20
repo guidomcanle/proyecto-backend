@@ -16,7 +16,7 @@ const chatMemorie = new ChatMemorieSqlite();
 const app = express();
 const router = Router();
 
-app.use("/", express.static(__dirname + "/public"));
+app.use("/", express.static(__dirname + "/producto"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -44,7 +44,7 @@ io.on("connection", async (socket) => {
   });
 });
 
-// El servidor funcionando en el puerto 3000
+// El servidor funcionando en el puerto
 httpServer.listen(8080, () =>
   console.log("Servidor corriendo en http://localhost:8080")
 );
