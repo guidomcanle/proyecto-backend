@@ -16,7 +16,7 @@ const chatMemorie = new ChatMemorieSqlite();
 const app = express();
 const router = Router();
 
-app.use("/", express.static(__dirname + "/producto"));
+app.use("/", express.static(__dirname + "/public"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

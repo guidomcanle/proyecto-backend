@@ -27,7 +27,10 @@ class ContenedorMariaDB {
 
   async getAll() {
     try {
-      console.log("data select");
+      const exist = await knex.schema.hasTable("prods");
+      if (!exist) {
+        this.createTable();
+      }
       return await knex.select("*").from("prods");
     } catch (err) {
       console.log(err);

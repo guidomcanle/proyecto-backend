@@ -20,6 +20,10 @@ class ChatMemorieSqlite {
   }
 
   async getHistorial() {
+    const exist = await knex.schema.hasTable("Mensajes");
+    if (!exist) {
+      this.createTable();
+    }
     return await knex.from("Mensajes").select("*");
   }
 
