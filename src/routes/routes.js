@@ -80,12 +80,19 @@ router
     respuesta.send(await contenedorCarrito.deleteAll());
   });
 
-router.route("/carrito/:id").delete(async (requerido, respuesta) => {
-  const id = requerido.params.id;
-  const arrayNuevo = await contenedorCarrito.deleteById(id);
+router
+  .route("/carrito/:id")
+  .get(async (requerido, respuesta) => {
+    const id = requerido.params.id;
 
-  respuesta.send({ nuevoArray: arrayNuevo });
-});
+    respuesta.send(await contenedorCarrito.getById(id));
+  })
+  .delete(async (requerido, respuesta) => {
+    const id = requerido.params.id;
+    const arrayNuevo = await contenedorCarrito.deleteById(id);
+
+    respuesta.send({ nuevoArray: arrayNuevo });
+  });
 
 router
   .route("/carrito/:id/productos")
@@ -94,18 +101,14 @@ router
     respuesta.send(await contenedorCarrito.getById(id));
   })
   .post(async (requerido, respuesta) => {
-    const id = requerido.params.id;
-    const idProd = requerido.body.idProd;
-    const prod = await contenedor.getById(idProd);
-    respuesta.send(await contenedorCarrito.save(id, prod));
-  })
-  .post(async (requerido, respuesta) => {
-    const id = requerido.params.id;
-    const idProd = requerido.body.idProd;
-    console.log(idProd);
-    const prod = await contenedor.getById(idProd);
+    const cart = await contenedorCarrito.getById(requerido.params.id);
+    const prod = await contenedor.getById(requerido.body.idProd);
+    console.log(pos);
     console.log(prod);
-    respuesta.send(await contenedorCarrito.update(id, prod));
+    await cart.productos.push(prod);
+    console.log(cart);
+    await contenedorCarrito.update(cart._id, cart);
+    respuesta.send(await contenedorCarrito.getById(req.params.id));
   });
 
 router

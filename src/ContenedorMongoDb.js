@@ -23,8 +23,6 @@ class ContenedorMongoDb {
   }
 
   async getById(id) {
-    console.log(id);
-    console.log(await this.collection.find({ _id: id }));
     return await this.collection.find({ _id: id });
   }
 
@@ -45,9 +43,7 @@ class ContenedorMongoDb {
   }
 
   async update(id, info) {
-    console.log(id);
-    console.log(info);
-    return await this.collection.findOneAndUpdate({ _id: id }, info);
+    return await this.collection.updateOne({ _id: id }, info);
   }
 }
 
