@@ -103,25 +103,34 @@ router
   .post(async (requerido, respuesta) => {
     const cart = await contenedorCarrito.getById(requerido.params.id);
     const prod = await contenedor.getById(requerido.body.idProd);
-    console.log(pos);
-    console.log(prod);
-    await cart.productos.push(prod);
-    console.log(cart);
-    await contenedorCarrito.update(cart._id, cart);
-    respuesta.send(await contenedorCarrito.getById(req.params.id));
-  });
 
-router
-  .route("/carrito/:id/productos/:id_prod")
-  .delete(async (requerido, respuesta) => {
-    const id = requerido.params.id;
-    const idProd = requerido.params.id_prod;
-
-    if (id == true) {
-      respuesta.send(await contenedorCarrito.deleteById(id, idProd));
+    if (
+      prod._id.valueOf() === requerido.body.idProd &&
+      cart._id.valueOf() === requerido.params.id
+    ) {
+      await cart.productos.push(prod);
+      await contenedorCarrito.update(cart._id, cart);
+      respuesta.send("Actualizado el carrito");
     } else {
-      respuesta.send({ error: "El carrito no existe 3" });
+      respuesta.send("No se pudo actualizar el carrito");
+    }
+  })
+  .delete(async (requerido, respuesta) => {
+    const cart = await contenedorCarrito.getById(requerido.params.id);
+    const prodIndex = cart.productos.findIndex(
+      (p) => p._id.valueOf() === requerido.body.idProd
+    );
+
+    if (prodIndex != -1) {
+      cart.productos.splice(prodIndex, 1);
+      respuesta.send(await contenedorCarrito.update(cart._id, cart));
+    } else {
+      respuesta.send({
+        error: "El carrito no existe o el producto no está en el carrito",
+      });
     }
   });
+
+router.route("/carrito/:id/productos/:id_prod");
 
 module.exports = router;

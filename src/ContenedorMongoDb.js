@@ -23,7 +23,7 @@ class ContenedorMongoDb {
   }
 
   async getById(id) {
-    return await this.collection.find({ _id: id });
+    return await this.collection.findOne({ _id: id });
   }
 
   async getAll() {
