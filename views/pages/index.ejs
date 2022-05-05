@@ -7,15 +7,13 @@
     <h1>Nuevo producto</h1>
     <form action="/api/productos" method="post">
       <label>Title:</label>
-      <input type="text" name="nombre" id="nombre"/> </br>
+      <input type="text" name="title" id="title"/> </br>
       <label>Price:</label>
-      <input type="number" name="precio" id="precio"/> </br>
+      <input type="number" name="price" id="price"/> </br>
       <label>Thumbnail:</label>
-      <input type="text" name="foto" id="foto"/> </br>
+      <input type="text" name="thumbnail" id="thumbnail"/> </br>
       <label>descripcion:</label>
-      <input type="text" name="descripcion" id="descripcion"/> </br>
-      <label>Codigo:</label>
-      <input type="number" name="código" id="código"/> </br>
+      <input type="text" name="description" id="description"/> </br>
       <label>stock:</label>
       <input type="number" name="stock" id="stock"/> </br>
       <input type="submit" value="enviar" />
@@ -28,7 +26,6 @@
                 <th >Image</th>
                 <th >price</th>
                 <th >Description</th>
-                <th >código</th>
                 <th >stock</th>
             </tr>
             <tbody id="tableBooks">

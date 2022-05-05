@@ -1,15 +1,10 @@
 const ContenedorMongoDb = require("../../ContenedorMongoDb");
+const carritosSchema = require("../models/cart.model");
 
 class CarritosMongoDB extends ContenedorMongoDb {
   constructor() {
-    super("carritos", CarritosSchema);
+    super("carritos", carritosSchema);
   }
-
-  async createCarrito() {}
-
-  async addProdIncar() {}
-
-  async deleteProdInCarById(id, idProd) {}
 }
 
 module.exports = CarritosMongoDB;

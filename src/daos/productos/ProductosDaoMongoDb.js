@@ -1,17 +1,10 @@
 const ContenedorMongoDb = require("../../ContenedorMongoDb");
+const productosSchema = require("../models/products.model");
 
 class ProductosMongoDB extends ContenedorMongoDb {
   constructor() {
-    super("productos", ProductosSchema);
+    super("productos", productosSchema);
   }
-
-  async saveProds(prods) {
-    return await this.collection.insertMany(prods);
-  }
-
-  async updateProduct() {}
-
-  async desconectar() {}
 }
 
 module.exports = ProductosMongoDB;

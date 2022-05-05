@@ -1,9 +1,9 @@
 const express = require("express");
 
-const ContenedorMariaDB = require("./containerMariaDB");
-const ChatMemorieSqlite = require("./chatMemorieSqlite");
-const contenedor = new ContenedorMariaDB();
-const chatMemorie = new ChatMemorieSqlite();
+// const ContenedorMariaDB = require("./containerMariaDB");
+// const ChatMemorieSqlite = require("./chatMemorieSqlite");
+// const contenedor = new ContenedorMariaDB();
+// const chatMemorie = new ChatMemorieSqlite();
 
 const router = require("./src/routes/routes");
 
@@ -12,29 +12,12 @@ const router = require("./src/routes/routes");
 // const contenedor = new Contenedor("./productos.json");
 // const chatMemorie = new ChatMemorie("./chatMemorie.json");
 
-const mongoose = require("mongoose");
-CRUD();
-async function CRUD() {
-  try {
-    mongoose.connect(
-      "mongodb+srv://guidocanle:eRqPhU6dfPk66ED@cluster0.z2lsl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }
-    );
-    console.log("Conectado a mongoDB");
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-const admin = require("firebase-admin");
-const serviceAccount = require("./proyecto-backend-48732-firebase-adminsdk-2qneu-136b2d954d.json");
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://proyecto-backend-48732.firebaseio.com",
-});
+// const admin = require("firebase-admin");
+// const serviceAccount = require("./proyecto-backend-48732-firebase-adminsdk-2qneu-136b2d954d.json");
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL: "https://proyecto-backend-48732.firebaseio.com",
+// });
 
 const app = express();
 
@@ -50,21 +33,21 @@ const async = require("hbs/lib/async");
 const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
 
-io.on("connection", async (socket) => {
-  console.log("User Connected");
-  io.sockets.emit("requestChat", await chatMemorie.getHistorial());
-  socket.on("newMessage", async (msg) => {
-    console.log(msg);
-    await chatMemorie.saveHistorial(msg);
-    io.sockets.emit("messages", await chatMemorie.getHistorial());
-  });
+// io.on("connection", async (socket) => {
+//   console.log("User Connected");
+//   io.sockets.emit("requestChat", await chatMemorie.getHistorial());
+//   socket.on("newMessage", async (msg) => {
+//     console.log(msg);
+//     await chatMemorie.saveHistorial(msg);
+//     io.sockets.emit("messages", await chatMemorie.getHistorial());
+//   });
 
-  io.sockets.emit("requestBooks", await contenedor.getAll());
-  socket.on("newBook", async (book) => {
-    await contenedor.save(book);
-    io.sockets.emit("prodList", await contenedor.getAll());
-  });
-});
+//   io.sockets.emit("requestBooks", await contenedor.getAll());
+//   socket.on("newBook", async (book) => {
+//     await contenedor.save(book);
+//     io.sockets.emit("prodList", await contenedor.getAll());
+//   });
+// });
 
 // El servidor funcionando en el puerto
 httpServer.listen(8080, () => {
