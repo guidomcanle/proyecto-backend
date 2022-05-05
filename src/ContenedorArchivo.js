@@ -5,7 +5,7 @@ class ContenedorArchivo {
     this.ruta = ruta;
   }
 
-  async findAll() {
+  async getAll() {
     try {
       const data = await fs.readFile(this.ruta);
       return JSON.parse(data);
@@ -14,8 +14,8 @@ class ContenedorArchivo {
     }
   }
 
-  async findById(id) {
-    const data = await this.findAll();
+  async getById(id) {
+    const data = await this.getAll();
     const objById = data.find((o) => o.id == id);
     return objById;
   }

@@ -7,10 +7,14 @@ const router = Router();
 // const ContenedorCarrito = require("../../contenedorCarrito");
 // const contenedorCarrito = new ContenedorCarrito("../contenedorCarrito.json");
 
-const ContenedorCarrito = require("../daos/carritos/CarritosDatoMongoDb");
-const contenedorCarrito = new ContenedorCarrito();
+// const ContenedorCarrito = require("../daos/carritos/CarritosDatoMongoDb");
+// const contenedorCarrito = new ContenedorCarrito();
+// const ContenedorMongoDb = require("../daos/productos/ProductosDaoMongoDb");
+// const contenedor = new ContenedorMongoDb();
 
-const ContenedorMongoDb = require("../daos/productos/ProductosDaoMongoDb");
+const ContenedorCarrito = require("../daos/carritos/CarritosDaoFirebase");
+const contenedorCarrito = new ContenedorCarrito();
+const ContenedorMongoDb = require("../daos/productos/ProductosDaoFirebase");
 const contenedor = new ContenedorMongoDb();
 
 router.route("/").get((requerido, respuesta) => {
@@ -74,7 +78,15 @@ router
     respuesta.send(await contenedorCarrito.getAll());
   })
   .post(async (requerido, respuesta) => {
-    respuesta.send(await contenedorCarrito.save());
+    const productos = [];
+    const createdAt = Date.now();
+
+    respuesta.send(
+      await contenedorCarrito.save({
+        productos: productos,
+        createdAt: createdAt,
+      })
+    );
   })
   .delete(async (requerido, respuesta) => {
     respuesta.send(await contenedorCarrito.deleteAll());
@@ -100,30 +112,61 @@ router
     const id = requerido.params.id;
     respuesta.send(await contenedorCarrito.getById(id));
   })
+  // Este funciona en Mongo
+  // .post(async (requerido, respuesta) => {
+  //   const cart = await contenedorCarrito.getById(requerido.params.id);
+  //   const prod = await contenedor.getById(requerido.body.idProd);
+
+  //   if (
+  //     prod._id.valueOf() === requerido.body.idProd &&
+  //     cart._id.valueOf() === requerido.params.id
+  //   ) {
+  //     await cart.productos.push(prod);
+  //     await contenedorCarrito.update(cart._id, cart);
+  //     respuesta.send("Actualizado el carrito");
+  //   } else {
+  //     respuesta.send("No se pudo actualizar el carrito");
+  //   }
+  // })
+  //Este funciona en Firebase
   .post(async (requerido, respuesta) => {
     const cart = await contenedorCarrito.getById(requerido.params.id);
     const prod = await contenedor.getById(requerido.body.idProd);
 
-    if (
-      prod._id.valueOf() === requerido.body.idProd &&
-      cart._id.valueOf() === requerido.params.id
-    ) {
-      await cart.productos.push(prod);
-      await contenedorCarrito.update(cart._id, cart);
-      respuesta.send("Actualizado el carrito");
-    } else {
-      respuesta.send("No se pudo actualizar el carrito");
-    }
+    const prodWithId = { ...prod, id: requerido.body.idProd };
+    console.log(prodWithId);
+    await cart.productos.push(prodWithId);
+    await contenedorCarrito.update(requerido.params.id, cart);
+    respuesta.send("Actualizado el carrito");
   })
+  // Mongo
+  // .delete(async (requerido, respuesta) => {
+  //   const cart = await contenedorCarrito.getById(requerido.params.id);
+  //   const prodIndex = cart.productos.findIndex(
+  //     (p) => p._id.valueOf() === requerido.body.idProd
+  //   );
+
+  //   if (prodIndex != -1) {
+  //     cart.productos.splice(prodIndex, 1);
+  //     respuesta.send(await contenedorCarrito.update(cart._id, cart));
+  //   } else {
+  //     respuesta.send({
+  //       error: "El carrito no existe o el producto no está en el carrito",
+  //     });
+  //   }
+  // })
+  //Firebase
   .delete(async (requerido, respuesta) => {
     const cart = await contenedorCarrito.getById(requerido.params.id);
     const prodIndex = cart.productos.findIndex(
-      (p) => p._id.valueOf() === requerido.body.idProd
+      (p) => p.id.valueOf() === requerido.body.idProd
     );
+
+    cart.productos.splice(prodIndex, 1);
 
     if (prodIndex != -1) {
       cart.productos.splice(prodIndex, 1);
-      respuesta.send(await contenedorCarrito.update(cart._id, cart));
+      respuesta.send(await contenedorCarrito.update(requerido.params.id, cart));
     } else {
       respuesta.send({
         error: "El carrito no existe o el producto no está en el carrito",

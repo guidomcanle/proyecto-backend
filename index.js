@@ -12,13 +12,6 @@ const router = require("./src/routes/routes");
 // const contenedor = new Contenedor("./productos.json");
 // const chatMemorie = new ChatMemorie("./chatMemorie.json");
 
-// const admin = require("firebase-admin");
-// const serviceAccount = require("./proyecto-backend-48732-firebase-adminsdk-2qneu-136b2d954d.json");
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount),
-//   databaseURL: "https://proyecto-backend-48732.firebaseio.com",
-// });
-
 const app = express();
 
 app.use("/", express.static(__dirname + "/public"));
