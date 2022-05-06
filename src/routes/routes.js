@@ -114,7 +114,7 @@ router
   .route("/carrito/:id/productos")
   .get(async (requerido, respuesta) => {
     const id = requerido.params.id;
-    console.log(await contenedorCarrito.getById(id));
+    //if no funciona
     if (id) {
       respuesta.json({
         productosEnElCarrito: await contenedorCarrito.getById(id),
