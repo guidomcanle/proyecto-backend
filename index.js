@@ -1,23 +1,12 @@
 const express = require("express");
-
-// const ContenedorMariaDB = require("./containerMariaDB");
-// const ChatMemorieSqlite = require("./chatMemorieSqlite");
-// const contenedor = new ContenedorMariaDB();
-// const chatMemorie = new ChatMemorieSqlite();
-
 const router = require("./src/routes/routes");
 
+// const ChatMemorieSqlite = require("./chatMemorieSqlite");
+// const chatMemorie = new ChatMemorieSqlite();
 // const ChatMemorie = require("./chatMemorie");
 // const Contenedor = require("./container");
 // const contenedor = new Contenedor("./productos.json");
 // const chatMemorie = new ChatMemorie("./chatMemorie.json");
-
-// const admin = require("firebase-admin");
-// const serviceAccount = require("./proyecto-backend-48732-firebase-adminsdk-2qneu-136b2d954d.json");
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount),
-//   databaseURL: "https://proyecto-backend-48732.firebaseio.com",
-// });
 
 const app = express();
 
@@ -25,6 +14,7 @@ app.use("/", express.static(__dirname + "/public"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/api", router);
 
 const { Server: HttpServer } = require("http");
 const { Server: IOServer } = require("socket.io");
@@ -56,9 +46,3 @@ httpServer.listen(8080, () => {
 
 // Para ejs
 app.set("view engine", "ejs");
-
-// app.get("*", function (req, res) {
-//   res.send("what???", 404);
-// });
-
-app.use("/api", router);

@@ -3,19 +3,35 @@ const router = Router();
 
 // const ContenedorMariaDB = require("../../containerMariaDB");
 // const contenedor = new ContenedorMariaDB();
-
 // const ContenedorCarrito = require("../../contenedorCarrito");
 // const contenedorCarrito = new ContenedorCarrito("../contenedorCarrito.json");
-
 const ContenedorCarrito = require("../daos/carritos/CarritosDatoMongoDb");
 const contenedorCarrito = new ContenedorCarrito();
-
 const ContenedorMongoDb = require("../daos/productos/ProductosDaoMongoDb");
 const contenedor = new ContenedorMongoDb();
+const ProdController = require("../controller/prod.controller");
+const prodController = new ProdController();
 
 router.route("/").get((requerido, respuesta) => {
   respuesta.send("<h1>Bienvenido</h1>");
 });
+
+router
+  .route("/productos-test")
+  .post(async (req, res) => {
+    try {
+      res.json({ creados: await prodController.createProds() });
+    } catch (e) {
+      console.log(e);
+    }
+  })
+  .get(async (req, res) => {
+    try {
+      res.json({ productos: await prodController.getProds() });
+    } catch (e) {
+      console.log(e);
+    }
+  });
 
 router
   .route("/productos")
