@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const router = Router();
+const session = require("express-session");
 
 // const ContenedorMariaDB = require("../../containerMariaDB");
 // const contenedor = new ContenedorMariaDB();
@@ -175,5 +176,46 @@ router
   });
 
 router.route("/carrito/:id/productos/:id_prod");
+
+router
+  .route("/login")
+  .get(async (requerido, respuesta) => {
+    if (typeof user === "undefined") {
+      user = "invitado";
+    }
+    console.log(user);
+    respuesta.render("pages/login", { user: user });
+  })
+  .post(async (req, res) => {
+    try {
+      const { user, password } = req.body;
+      console.log(user);
+      console.log(password);
+      if (user != "juan" || password != "123456") {
+        return res.json("Error");
+      }
+      req.session.username = user;
+      res.redirect("/api/privado");
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+router.route("/logout").post(async (req, res) => {
+  try {
+    req.session.destroy((err) => {
+      if (!err) {
+        user = "deslogueado";
+        res.redirect("/api/login");
+      } else res.send("error");
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.route("/privado").get(async (req, res) => {
+  res.render("pages/privado", { user: req.session.username });
+});
 
 module.exports = router;

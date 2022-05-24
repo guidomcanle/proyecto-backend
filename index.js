@@ -1,5 +1,6 @@
 const express = require("express");
 const router = require("./src/routes/routes");
+const session = require("express-session");
 
 // const ChatMemorieSqlite = require("./chatMemorieSqlite");
 // const chatMemorie = new ChatMemorieSqlite();
@@ -14,6 +15,15 @@ app.use("/", express.static(__dirname + "/public"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(
+  session({
+    secret: "secreto",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+
 app.use("/api", router);
 
 const { Server: HttpServer } = require("http");
