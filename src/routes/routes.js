@@ -215,7 +215,11 @@ router.route("/logout").post(async (req, res) => {
 });
 
 router.route("/privado").get(async (req, res) => {
-  res.render("pages/privado", { user: req.session.username });
+  if (!req.session.username) {
+    res.redirect("/api/login");
+  } else {
+    res.render("pages/privado", { user: req.session.username });
+  }
 });
 
 module.exports = router;

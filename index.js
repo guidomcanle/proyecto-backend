@@ -1,6 +1,8 @@
 const express = require("express");
 const router = require("./src/routes/routes");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
+const advancedOptions = { useNewUrlParser: true, useUnifiedtopology: true };
 
 // const ChatMemorieSqlite = require("./chatMemorieSqlite");
 // const chatMemorie = new ChatMemorieSqlite();
@@ -18,9 +20,15 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   session({
+    store: MongoStore.create({
+      mongoUrl:
+        "mongodb+srv://guidocanle:eRqPhU6dfPk66ED@cluster0.z2lsl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+      mongoOptions: advancedOptions,
+    }),
     secret: "secreto",
     resave: true,
     saveUninitialized: true,
+    cookie: { maxAge: 60000 },
   })
 );
 
