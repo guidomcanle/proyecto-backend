@@ -1,17 +1,20 @@
 const { Router } = require("express");
 const router = Router();
 const session = require("express-session");
+const passport = require("passport");
+const { Strategy: LocalStrategy } = require("passport-local");
 
-// const ContenedorMariaDB = require("../../containerMariaDB");
-// const contenedor = new ContenedorMariaDB();
-// const ContenedorCarrito = require("../../contenedorCarrito");
-// const contenedorCarrito = new ContenedorCarrito("../contenedorCarrito.json");
 const ContenedorCarrito = require("../daos/carritos/CarritosDatoMongoDb");
 const contenedorCarrito = new ContenedorCarrito();
 const ContenedorMongoDb = require("../daos/productos/ProductosDaoMongoDb");
 const contenedor = new ContenedorMongoDb();
+const ContUsersMongoDB = require("../daos/users/UsersDaoMongoDb");
+const userDb = new ContUsersMongoDB();
+
 const ProdController = require("../controller/prod.controller");
 const prodController = new ProdController();
+
+const bcrypt = require("bcrypt");
 
 router.route("/").get((requerido, respuesta) => {
   respuesta.send("<h1>Bienvenido</h1>");
@@ -177,29 +180,55 @@ router
 
 router.route("/carrito/:id/productos/:id_prod");
 
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((user, done) => {
+  userDb.collection.findById(user, done);
+});
+
+passport.use(
+  "login",
+  new LocalStrategy((username, password, done) => {
+    userDb.collection.findOne({ username }, (err, user) => {
+      console.log(user);
+      if (err) return done(err);
+      if (!user) {
+        console.log("User Not Found with username " + username);
+        return done(null, false);
+      }
+      const userValid = bcrypt.compareSync(password, user.password);
+      if (!userValid) {
+        console.log("Invalid Password");
+        return done(null, false);
+      } else {
+        return done(null, user);
+      }
+    });
+  })
+);
+
 router
   .route("/login")
   .get(async (requerido, respuesta) => {
     if (typeof user === "undefined") {
       user = "invitado";
     }
-    console.log(user);
     respuesta.render("pages/login", { user: user });
   })
-  .post(async (req, res) => {
-    try {
-      const { user, password } = req.body;
-      console.log(user);
-      console.log(password);
-      if (user != "juan" || password != "123456") {
-        return res.json("Error");
+  .post(
+    passport.authenticate("login", {
+      failureRedirect: "/api/error",
+    }),
+    async (req, res) => {
+      try {
+        res.redirect("/api/privado");
+      } catch (err) {
+        console.log(err);
       }
-      req.session.username = user;
-      res.redirect("/api/privado");
-    } catch (err) {
-      console.log(err);
     }
-  });
+  );
 
 router.route("/logout").post(async (req, res) => {
   try {
@@ -214,11 +243,82 @@ router.route("/logout").post(async (req, res) => {
   }
 });
 
+passport.use(
+  "singup",
+  new LocalStrategy(
+    {
+      passReqToCallbak: true,
+    },
+    async (req, username, password, done) => {
+      try {
+        console.log(username);
+        console.log(password);
+        const userExist = await userDb.collection.findOne({
+          username,
+        });
+        console.log(userExist);
+        if (userExist) {
+          console.log("Este nombre de usuario no está disponible");
+          return done(null, false);
+        }
+        console.log(userExist);
+        const newUser = {
+          username: username,
+          password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null),
+          email: email,
+        };
+        console.log("user " + newUser);
+        const userFinal = await userDb.collection.insertMany(newUser);
+        return done(null, userFinal);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  )
+);
+
+router
+  .route("/singup")
+  .get(async (requerido, respuesta) => {
+    respuesta.render("pages/singup");
+  })
+  .post(
+    passport.authenticate("singup", {
+      failureRedirect: "/api/error",
+    }),
+    async (req, res) => {
+      try {
+        const user = req.user;
+        if (!user) {
+          res.send("Error en el registro");
+        } else {
+          res.send("Registrado con éxito");
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  );
+// .post(async (req, res) => {
+//   try {
+//     const { username, password, mail } = req.body;
+//     const newUser = {
+//       username: username,
+//       password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null),
+//       mail: mail,
+//     };
+
+//     await userDb.save(newUser);
+//   } catch (err) {
+//     console.log(err);
+//   }
+// });
+
 router.route("/privado").get(async (req, res) => {
-  if (!req.session.username) {
+  if (!req.user.username) {
     res.redirect("/api/login");
   } else {
-    res.render("pages/privado", { user: req.session.username });
+    res.render("pages/privado", { user: req.user.username });
   }
 });
 

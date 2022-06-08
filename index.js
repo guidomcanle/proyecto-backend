@@ -3,6 +3,9 @@ const router = require("./src/routes/routes");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const advancedOptions = { useNewUrlParser: true, useUnifiedtopology: true };
+const cookieParser = require("cookie-parser");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
 
 // const ChatMemorieSqlite = require("./chatMemorieSqlite");
 // const chatMemorie = new ChatMemorieSqlite();
@@ -18,6 +21,7 @@ app.use("/", express.static(__dirname + "/public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(cookieParser());
 app.use(
   session({
     store: MongoStore.create({
@@ -32,11 +36,30 @@ app.use(
   })
 );
 
+app.use(passport.authenticate("session"));
+
+app.use(
+  session({
+    secret: "keyboard cat",
+    cookie: {
+      httpOnly: false,
+      secure: false,
+      maxAge: 6000,
+    },
+    rolling: true,
+    resave: true,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use("/api", router);
 
 const { Server: HttpServer } = require("http");
 const { Server: IOServer } = require("socket.io");
-const async = require("hbs/lib/async");
+// const { createHash } = require("crypto");
+const { config } = require("process");
 
 const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
