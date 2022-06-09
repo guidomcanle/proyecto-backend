@@ -247,12 +247,13 @@ passport.use(
   "singup",
   new LocalStrategy(
     {
-      passReqToCallbak: true,
+      passReqToCallback: true,
     },
     async (req, username, password, done) => {
       try {
         console.log(username);
         console.log(password);
+        console.log(req.email);
         const userExist = await userDb.collection.findOne({
           username,
         });
@@ -265,7 +266,7 @@ passport.use(
         const newUser = {
           username: username,
           password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null),
-          email: email,
+          email: req.body.email,
         };
         console.log("user " + newUser);
         const userFinal = await userDb.collection.insertMany(newUser);
