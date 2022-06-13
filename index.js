@@ -5,14 +5,7 @@ const MongoStore = require("connect-mongo");
 const advancedOptions = { useNewUrlParser: true, useUnifiedtopology: true };
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
-const LocalStrategy = require("passport-local");
-
-// const ChatMemorieSqlite = require("./chatMemorieSqlite");
-// const chatMemorie = new ChatMemorieSqlite();
-// const ChatMemorie = require("./chatMemorie");
-// const Contenedor = require("./container");
-// const contenedor = new Contenedor("./productos.json");
-// const chatMemorie = new ChatMemorie("./chatMemorie.json");
+const config = require("./config");
 
 const app = express();
 
@@ -25,8 +18,7 @@ app.use(cookieParser());
 app.use(
   session({
     store: MongoStore.create({
-      mongoUrl:
-        "mongodb+srv://guidocanle:eRqPhU6dfPk66ED@cluster0.z2lsl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+      mongoUrl: config.MONGODB_,
       mongoOptions: advancedOptions,
     }),
     secret: "secreto",
@@ -59,7 +51,6 @@ app.use("/api", router);
 const { Server: HttpServer } = require("http");
 const { Server: IOServer } = require("socket.io");
 // const { createHash } = require("crypto");
-const { config } = require("process");
 
 const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
@@ -81,9 +72,13 @@ const io = new IOServer(httpServer);
 // });
 
 // El servidor funcionando en el puerto
-httpServer.listen(8080, () => {
-  console.log("Servidor corriendo en http://localhost:8080");
-});
+// httpServer.listen(8080, () => {
+//   console.log("Servidor corriendo en http://localhost:8080");
+// });
 
 // Para ejs
 app.set("view engine", "ejs");
+
+app.listen(config.PORT, config.HOST, function () {
+  console.log(`App listening on http://${config.HOST}:${config.PORT}`);
+});

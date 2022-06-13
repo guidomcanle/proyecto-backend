@@ -323,4 +323,16 @@ router.route("/privado").get(async (req, res) => {
   }
 });
 
+router.route("/info").get(async (req, res) => {
+  res.render("pages/info", {
+    directorio: process.cwd(),
+    id: process.pid,
+    versionNode: process.version,
+    os: process.platform,
+    memoria: process.memoryUsage,
+    argumentos: process.argv,
+    path: process.execPath,
+  });
+});
+
 module.exports = router;
