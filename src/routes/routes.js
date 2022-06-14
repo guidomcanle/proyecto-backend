@@ -3,6 +3,7 @@ const router = Router();
 const session = require("express-session");
 const passport = require("passport");
 const { Strategy: LocalStrategy } = require("passport-local");
+const { fork } = require("child_process");
 
 const ContenedorCarrito = require("../daos/carritos/CarritosDatoMongoDb");
 const contenedorCarrito = new ContenedorCarrito();
@@ -314,6 +315,21 @@ router
 //     console.log(err);
 //   }
 // });
+
+router.route("/randoms").get(async (req, res) => {
+  console.log(req.query.cant);
+  const cant = req.query.cant;
+
+  const num = fork("computo.js");
+  num.send("sart");
+  num.on("message", (random) => {
+    numeroRandom(cant);
+    console.log({ random: random });
+    res.end(`hola ${random}`);
+  });
+
+  // res.json({ hola: "hola" });
+});
 
 router.route("/privado").get(async (req, res) => {
   if (!req.user.username) {

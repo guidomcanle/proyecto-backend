@@ -1,14 +1,12 @@
 const mongoose = require("mongoose");
+const config = require("../config");
 
 async function CRUD() {
   try {
-    mongoose.connect(
-      "mongodb+srv://guidocanle:eRqPhU6dfPk66ED@cluster0.z2lsl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }
-    );
+    mongoose.connect(config.MONGODB_CONTAINER, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log("Conectado a mongoDB");
   } catch (e) {
     console.log(e);

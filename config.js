@@ -26,12 +26,14 @@ const modo = process.env.MODO;
 const host = process.env.HOST;
 const port = process.env.PORT;
 const mongoDb = process.env.MONGODB_;
+const mongoDbContainer = process.env.MONGODB_CONTAINER;
 
-console.log({ modo, host, port, mongoDb });
+console.log({ modo, host, port, mongoDb, mongoDbContainer });
 
 module.exports = {
   NODE_ENV: process.env.NODE_ENV || "development",
   HOST: host || "localhost",
   PORT: port || 80,
   MONGODB_: mongoDb || "",
+  MONGODB_CONTAINER: mongoDbContainer || "",
 };
