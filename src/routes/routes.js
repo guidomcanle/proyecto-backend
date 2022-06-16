@@ -301,34 +301,15 @@ router
       }
     }
   );
-// .post(async (req, res) => {
-//   try {
-//     const { username, password, mail } = req.body;
-//     const newUser = {
-//       username: username,
-//       password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null),
-//       mail: mail,
-//     };
-
-//     await userDb.save(newUser);
-//   } catch (err) {
-//     console.log(err);
-//   }
-// });
 
 router.route("/randoms").get(async (req, res) => {
-  console.log(req.query.cant);
-  const cant = req.query.cant;
-
+  const cant = Number(req.query.cant ? req.query.cant : 100000000);
+  console.log(cant);
   const num = fork("computo.js");
-  num.send("sart");
+  num.send(cant);
   num.on("message", (random) => {
-    numeroRandom(cant);
-    console.log({ random: random });
     res.end(`hola ${random}`);
   });
-
-  // res.json({ hola: "hola" });
 });
 
 router.route("/privado").get(async (req, res) => {
